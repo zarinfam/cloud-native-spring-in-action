@@ -1,0 +1,35 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+metadata:
+  name: polar-bookshop
+build:
+  artifacts:
+    - image: catalog-service
+      context: catalog-service
+      buildpacks:
+        builder: 'gcr.io/buildpacks/builder:v1'
+        env:
+          - GOOGLE_RUNTIME_VERSION=17
+    - image: edge-service
+      context: edge-service
+      buildpacks:
+        builder: 'gcr.io/buildpacks/builder:v1'
+        env:
+          - GOOGLE_RUNTIME_VERSION=17
+    - image: order-service
+      context: order-service
+      buildpacks:
+        builder: 'gcr.io/buildpacks/builder:v1'
+        env:
+          - GOOGLE_RUNTIME_VERSION=17
+manifests:
+  rawYaml:
+    - catalog-service/k8s/deployment.yml
+    - catalog-service/k8s/service.yml
+    - edge-service/k8s/deployment.yml
+    - edge-service/k8s/ingress.yml
+    - edge-service/k8s/service.yml
+    - order-service/k8s/deployment.yml
+    - order-service/k8s/service.yml
+    # - polar-deployment/kubernetes/platform/development/services/postgresql.yml
+    # - polar-deployment/kubernetes/platform/development/services/redis.yml
